@@ -1,11 +1,14 @@
-;;; helm-rubygems-local.el --- Installed local rubygems find-file for helm
+;;; anything-rubygems-local.el --- Installed local rubygems find-file for anything
 
 ;; Copyright (C) 2013 by hadashiA
 
 ;; Author: hadashiA <dev@hadashikick.jp>
 ;; URL: https://github.com/f-kubotar/helm-rubygems-local
+;; URL: https://github.com/bamanzi/anything-rubygems-local
 ;; Version: 0.0.1
-;; Package-Requires: ((helm "1.5.3"))
+;; Package-Requires: ((anything "1.3.8"))
+
+;; This package is based on `helm-rubygems-local' from hadashiA
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +25,7 @@
 
 ;;; Code:
 
-(defvar helm-c-source-rubygems-local
+(defvar anything-c-source-rubygems-local
   '((name . "rubygems")
     (candidates-in-buffer)
     (init . (lambda ()
@@ -38,21 +41,21 @@
                              (return-from 'find-gemfile cur-dir))
                            (setq cur-dir (expand-file-name (concat cur-dir "/.."))))
                          ))))
-                (helm-attrset 'gem-command
+                (anything-attrset 'gem-command
                                   (concat (if gemfile-dir
                                               (format "BUNDLE_GEMFILE=%s/Gemfile bundle exec "
                                                       gemfile-dir)
                                             "")
                                           "gem 2>/dev/null"))
-                (unless (helm-candidate-buffer)
-                  (call-process-shell-command (format "%s list" (helm-attr 'gem-command))
+                (unless (anything-candidate-buffer)
+                  (call-process-shell-command (format "%s list" (anything-attr 'gem-command))
                                               nil
-                                              (helm-candidate-buffer 'local))))))
+                                              (anything-candidate-buffer 'local))))))
     (action . (lambda (gem-name)
-                ;; (message (helm-attr 'gem-command))
+                ;; (message (anything-attr 'gem-command))
                 (let ((gem-which (shell-command-to-string
                                   (format "%s which %s"
-                                          (helm-attr 'gem-command)
+                                          (anything-attr 'gem-command)
                                           (replace-regexp-in-string "\s+(.+)$" "" gem-name))))
                       (path))
                   (print gem-which)
@@ -69,13 +72,13 @@
     ))
 
 ;;;###autoload
-(defun helm-rubygems-local ()
+(defun anything-rubygems-local ()
   (interactive)
-  (helm-other-buffer
-   '(helm-c-source-rubygems-local)
-   "*helm local gems*"
+  (anything-other-buffer
+   '(anything-c-source-rubygems-local)
+   "*anything local gems*"
   ))
 
-(provide 'helm-rubygems-local)
+(provide 'anything-rubygems-local)
 
-;;; helm-rubygems-local.el ends here
+;;; anything-rubygems-local.el ends here
